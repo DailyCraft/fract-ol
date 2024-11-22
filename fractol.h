@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 09:04:16 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/22 10:21:08 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/11/22 11:52:10 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,15 @@ typedef struct s_vars
 	}	type;
 }	t_vars;
 
+typedef	struct s_complex
+{
+	double	real;
+	double	imaginary;
+}	t_complex;
+
+
 int	key_hook(int key, t_vars *vars);
 int	close_window(t_vars *vars);
+int	is_in_mb(double real, double imaginary);
 
 #endif
