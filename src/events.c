@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvan-hum <dvan-hum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 10:20:26 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/25 15:31:54 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/11/26 11:18:23 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,37 @@ int	key_hook(int key, t_data *data)
 		data->x += 100 * (-2 * (key == XK_Left) + 1);
 	else if (key == XK_Up || key == XK_Down)
 		data->y += 100 * (-2 * (key == XK_Up) + 1);
+	else if (key == XK_d)
+	{
+		data->debug_enabled = !data->debug_enabled;
+		return (0);
+	}
 	else
 		return (0);
-	expose_hook(data);
+	reset_fractal(data);
 	return (0);
 }
 
 int	expose_hook(t_data *data)
 {
-	(void) data;
-	/* compute_fractal(data, 0, 1600);
-	mlx_put_image_to_window(data->mlx, data->window, data->img.ptr, 0, 0); */
+	static int	min_x = 0;
+	char		*str;
+
+	if (min_x >= WINDOW_WIDTH)
+	{
+		data->fractal.iteration += 2;
+		min_x = 0;
+	}
+	compute_fractal(data, min_x, min_x + WINDOW_WIDTH / 10);
+	mlx_put_image_to_window(data->mlx, data->window, data->img.ptr, 0, 0);
+	if (data->debug_enabled)
+	{
+		ft_asprintf(&str, "Open/hide debug: D  Iterations: %d  Scale: %u",
+			data->fractal.iteration, (unsigned) data->scale);
+		mlx_string_put(data->mlx, data->window, 10, 10, 0, str);
+		free(str);
+	}	
+	min_x += WINDOW_WIDTH / 10;
 	return (0);
 }
 
@@ -42,6 +62,7 @@ int	mouse_hook(int button, int x, int y, t_data *data)
 	if (button == 4) // SCROLL_UP
 	{
 		data->scale *= 1.2;
+		
 		data->x = (x + data->x) * 1.2 - x;
 		data->y = (y + data->y) * 1.2 - y;
 	}
@@ -61,19 +82,5 @@ int	mouse_hook(int button, int x, int y, t_data *data)
 
 int	loop_hook(t_data *data)
 {
-	static int	min_x = 0;
-	char		*str;
-
-	if (min_x >= 1600)
-	{
-		data->fractal.iteration += 2;
-		min_x = 0;
-	}
-	compute_fractal(data, min_x, min_x + 160);
-	mlx_put_image_to_window(data->mlx, data->window, data->img.ptr, 0, 0);
-	str = ft_itoa(data->fractal.iteration);
-	mlx_string_put(data->mlx, data->window, 10, 10, 0xffffff, str);
-	free(str);
-	min_x += 160;
-	return (0);
+	return (expose_hook(data));
 }

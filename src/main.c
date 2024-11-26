@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvan-hum <dvan-hum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 08:59:56 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/25 15:30:41 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:38:55 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ static int	init_type(t_data *data, int argc, char **argv)
 static int	init_mlx(t_data *data)
 {
 	data->mlx = mlx_init();
-	data->window = mlx_new_window(data->mlx, 1600, 1000, "fract-ol");
-	data->img.ptr = mlx_new_image(data->mlx, 1600, 1000);
+	data->window = mlx_new_window(data->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "fract-ol");
+	data->img.ptr = mlx_new_image(data->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	data->img.data = (int *) mlx_get_data_addr(data->img.ptr, &data->img.bits_per_pixel, &data->img.size_line, &data->img.endian);
 	mlx_hook(data->window, DestroyNotify, KeyReleaseMask, mlx_loop_end, data->mlx);
 	mlx_key_hook(data->window, key_hook, data);
@@ -61,8 +61,9 @@ int	main(int argc, char **argv)
 
 	data = malloc(sizeof(t_data));
 	data->scale = 500;
-	data->x = -1100;
-	data->y = -500;
+	data->x = WINDOW_WIDTH / -2.0;
+	data->y = WINDOW_HEIGHT / -2.0;
+	data->debug_enabled = 0;
 	reset_fractal(data);
 	if (init_type(data, argc, argv)
 		&& init_mlx(data))
