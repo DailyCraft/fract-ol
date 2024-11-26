@@ -6,13 +6,13 @@
 #    By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/22 08:59:59 by dvan-hum          #+#    #+#              #
-#    Updated: 2024/11/25 09:59:58 by dvan-hum         ###   ########.fr        #
+#    Updated: 2024/11/26 15:37:13 by dvan-hum         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fractol
 
-CC = gcc -Wall -Wextra -Werror -g
+CC = gcc -Wall -Wextra -Werror
 
 SRC = events.c fractal.c main.c render.c
 OBJ = $(patsubst %.c, obj/%.o, $(SRC))
@@ -38,7 +38,7 @@ obj/%.o: src/%.c | ./obj
 	mkdir obj
 
 clean:
-	rm -rf ./obj
+	rm -rf ./obj libft.a libmlx.a
 	make -C libft clean
 	make -C minilibx clean
 

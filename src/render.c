@@ -6,38 +6,60 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:57:51 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/26 11:14:20 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:27:25 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-void	zoom_in(t_data *data, double factor, int mouse_x, int mouse_y)
+void	zoom(t_data *data, double factor, int mouse_x, int mouse_y)
 {
-	int	old[WINDOW_WIDTH * WINDOW_HEIGHT];
+	int	old[WIDTH * HEIGHT];
 	int	x;
 	int	y;
 	int	old_x;
 	int	old_y;
 
-	ft_memcpy(old, data->img.data, WINDOW_WIDTH * WINDOW_HEIGHT * sizeof(int));
+	ft_memcpy(old, data->img.data, WIDTH * HEIGHT * sizeof(int));
 	y = 0;
-	while (y < WINDOW_HEIGHT)
+	while (y < HEIGHT)
 	{
 		x = 0;
-		while (x < WINDOW_WIDTH)
+		while (x < WIDTH)
 		{
-			if (x < old_x)
-				old_x = x + (abs(x - mouse_x) - abs(x - mouse_x) / factor);
-			else
-				old_x = x - (abs(x - mouse_x) - abs(x - mouse_x) / factor);
-			if (y < old_y)
-				old_y = y + (abs(y - mouse_y) - abs(y - mouse_y) / factor);
-			else
-				old_y = y - (abs(y - mouse_y) - abs(y - mouse_y) / factor);
-			data->img.data[y * WINDOW_WIDTH + x] = old[old_y * WINDOW_WIDTH + old_x];
+			old_x = (x - mouse_x) / factor + mouse_x;
+			old_y = (y - mouse_y) / factor + mouse_y;
+			if (old_x >= 0 && old_x < WIDTH && old_y >= 0 && old_y < HEIGHT)
+				data->img.data[y * WIDTH + x] = old[old_y * WIDTH + old_x];
 			x++;
 		}
 		y++;
 	}
+}
+
+void	move(t_data *data, int horizontal, int vertical)
+{
+	int	y;
+
+	(void) vertical;
+	y = 0;
+	while (y < HEIGHT)
+	{
+		ft_memmove(data->img.data + WIDTH * y - horizontal * (horizontal < 0),
+			data->img.data + WIDTH * y + horizontal * (horizontal > 0),
+			(WIDTH - abs(horizontal)) * sizeof(int));
+		y++;
+	}
+	ft_memmove(data->img.data - vertical * WIDTH * (vertical < 0),
+		data->img.data + vertical * WIDTH * (vertical > 0),
+		WIDTH * (HEIGHT - abs(vertical)) * sizeof(int));
+}
+
+int	smooth_rgb(double value)
+{
+	return (ft_rgb(
+			(sin(value * 0.1) + 1) * 127.5,
+			(sin(value * 0.1 + M_PI / 2) + 1) * 127.5,
+			(sin(value * 0.1 + M_PI) + 1) * 127.5
+		));
 }

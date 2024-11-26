@@ -6,15 +6,15 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 09:04:16 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/26 11:20:00 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:30:58 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
-# define WINDOW_WIDTH 1600
-# define WINDOW_HEIGHT 1000
+# define WIDTH 1000
+# define HEIGHT 1000
 
 # define XK_MISCELLANY
 # define XK_LATIN1
@@ -36,15 +36,15 @@ enum e_type
 
 typedef struct s_type
 {
-	int		type;
-	double	power;
+	int					type;
+	double				power;
 	long double complex	c;
 }	t_type;
 
 typedef struct s_fractal
 {
-	long double complex	z[WINDOW_WIDTH * WINDOW_HEIGHT];
-	int					iterations[WINDOW_WIDTH * WINDOW_HEIGHT];
+	long double complex	z[WIDTH * HEIGHT];
+	int					iterations[WIDTH * HEIGHT];
 	int					iteration;
 }	t_fractal;
 
@@ -75,10 +75,12 @@ int		expose_hook(t_data *vars);
 int		mouse_hook(int button, int x, int y, t_data *vars);
 int		loop_hook(t_data *data);
 
-int		get_point(long double complex c, double pow, t_data *data, int x, int y);
+int		get_point(long double complex c, double pow, t_data *data, complex pos);
 void	compute_fractal(t_data *data, int min_x, int max_x);
 void	reset_fractal(t_data *data);
 
-void	zoom_in(t_data *data, double factor, int mouse_x, int mouse_y);
+void	zoom(t_data *data, double factor, int mouse_x, int mouse_y);
+void	move(t_data *data, int horizontal, int vertical);
+int		smooth_rgb(double value);
 
 #endif
