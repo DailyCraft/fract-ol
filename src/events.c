@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 10:20:26 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/26 15:21:41 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/11/27 16:29:44 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,15 @@ int	key_hook(int key, t_data *data)
 		data->debug_enabled = !data->debug_enabled;
 		return (0);
 	}
+	else if (key == XK_c)
+	{
+		data->color_index = (data->color_index + 1) % 2;
+		return (0);
+	}
 	else
 		return (0);
 	reset_fractal(data);
-	mlx_put_image_to_window(data->mlx, data->window, data->img.ptr, 0, 0);
+	mlx_refresh_image(data);
 	return (0);
 }
 
@@ -52,7 +57,8 @@ int	expose_hook(t_data *data)
 		min_x = 0;
 	}
 	compute_fractal(data, min_x, min_x + WIDTH / 10);
-	mlx_put_image_to_window(data->mlx, data->window, data->img.ptr, 0, 0);
+	draw_pixels(data, min_x, min_x + WIDTH / 10);
+	mlx_refresh_image(data);
 	if (data->debug_enabled)
 	{
 		ft_asprintf(&str, "Open/hide debug: D  Iterations: %d  Scale: %u",
@@ -79,7 +85,7 @@ int	mouse_hook(int button, int x, int y, t_data *data)
 	data->y = (y + data->y) * factor - y;
 	reset_fractal(data);
 	zoom(data, factor, x, y);
-	mlx_put_image_to_window(data->mlx, data->window, data->img.ptr, 0, 0);
+	mlx_refresh_image(data);
 	return (0);
 }
 

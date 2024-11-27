@@ -6,13 +6,13 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:57:51 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/26 15:27:25 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/11/27 16:22:11 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-void	zoom(t_data *data, double factor, int mouse_x, int mouse_y)
+/*void	zoom(t_data *data, double factor, int mouse_x, int mouse_y)
 {
 	int	old[WIDTH * HEIGHT];
 	int	x;
@@ -53,7 +53,7 @@ void	move(t_data *data, int horizontal, int vertical)
 	ft_memmove(data->img.data - vertical * WIDTH * (vertical < 0),
 		data->img.data + vertical * WIDTH * (vertical > 0),
 		WIDTH * (HEIGHT - abs(vertical)) * sizeof(int));
-}
+}*/
 
 int	smooth_rgb(double value)
 {
@@ -62,4 +62,36 @@ int	smooth_rgb(double value)
 			(sin(value * 0.1 + M_PI / 2) + 1) * 127.5,
 			(sin(value * 0.1 + M_PI) + 1) * 127.5
 		));
+}
+
+int get_color(t_data *data, int x, int y)
+{
+	t_point	*point;
+
+	point = &data->fractal.points[y * WIDTH + x];
+	if (point->iteration >= data->fractal.iteration)
+		return (0);
+	else if (data->color_index == 0)
+		return (smooth_rgb(point->iteration + 1 - log(log(cabsl(point->z))) / log(2)));
+	else if (data->color_index == 1)
+		return (ft_rgb((point->iteration * 5) % 256, (point->iteration * 3) % 256, (point->iteration * 7) % 256));
+	return (-1);
+}
+
+void	draw_pixels(t_data *data, int min_x, int max_x)
+{
+	int	x;
+	int	y;
+
+	x = min_x;
+	while (x < max_x)
+	{
+		y = 0;
+		while (y < HEIGHT)
+		{
+			mlx_set_pixel(data, x, y, get_color(data, x, y));
+			y++;
+		}
+		x++;
+	}
 }

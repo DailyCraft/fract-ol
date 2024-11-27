@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 09:04:16 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/26 15:30:58 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/11/27 16:28:26 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@
 # include <mlx.h>
 # include <X11/X.h>
 # include <X11/keysymdef.h>
-# include <stdio.h>
-# include <string.h>
+//# include <stdio.h>
+//# include <string.h>
+
+typedef long double complex	t_lcomplex;
 
 enum e_type
 {
@@ -34,18 +36,20 @@ enum e_type
 	JULIA
 };
 
-typedef struct s_type
+typedef struct s_point
 {
-	int					type;
-	double				power;
-	long double complex	c;
-}	t_type;
+	t_lcomplex	z;
+	int			iteration;
+}	t_point;
+
 
 typedef struct s_fractal
 {
-	long double complex	z[WIDTH * HEIGHT];
-	int					iterations[WIDTH * HEIGHT];
-	int					iteration;
+	enum e_type	type;
+	double		power;
+	t_lcomplex	c;
+	t_point		points[WIDTH * HEIGHT];
+	int			iteration;
 }	t_fractal;
 
 typedef struct s_image
@@ -59,15 +63,15 @@ typedef struct s_image
 
 typedef struct s_data
 {
-	void			*mlx;
-	void			*window;
-	int				debug_enabled;
-	t_type			type;
-	long double		scale;
-	double			x;
-	double			y;
-	t_fractal		fractal;
-	t_image			img;
+	void		*mlx;
+	void		*window;
+	int			debug_enabled;
+	int			color_index;
+	long double	scale;
+	double		x;
+	double		y;
+	t_fractal	fractal;
+	t_image		img;
 }	t_data;
 
 int		key_hook(int key, t_data *vars);
@@ -75,12 +79,18 @@ int		expose_hook(t_data *vars);
 int		mouse_hook(int button, int x, int y, t_data *vars);
 int		loop_hook(t_data *data);
 
-int		get_point(long double complex c, double pow, t_data *data, complex pos);
+void	get_point(t_lcomplex c, double pow, t_data *data, complex pos);
 void	compute_fractal(t_data *data, int min_x, int max_x);
+void	reset_point(t_data *data, int x, int y);
 void	reset_fractal(t_data *data);
 
 void	zoom(t_data *data, double factor, int mouse_x, int mouse_y);
 void	move(t_data *data, int horizontal, int vertical);
 int		smooth_rgb(double value);
+void	draw_pixels(t_data *data, int min_x, int max_x);
+
+int		init_mlx(t_data *data);
+int		mlx_refresh_image(t_data *data);
+void	mlx_set_pixel(t_data *data, int x, int y, int color);
 
 #endif

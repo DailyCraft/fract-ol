@@ -6,7 +6,7 @@
 #    By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/22 08:59:59 by dvan-hum          #+#    #+#              #
-#    Updated: 2024/11/26 15:37:13 by dvan-hum         ###   ########.fr        #
+#    Updated: 2024/11/27 16:22:04 by dvan-hum         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = fractol
 
 CC = gcc -Wall -Wextra -Werror
 
-SRC = events.c fractal.c main.c render.c
+SRC = events.c fractal.c main.c mlx.c render.c move.c
 OBJ = $(patsubst %.c, obj/%.o, $(SRC))
 INCLUDES = ./
 
