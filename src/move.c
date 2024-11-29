@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 09:09:44 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/27 16:28:37 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/11/29 09:28:23 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,10 @@ void	move(t_data *data, int horizontal, int vertical)
 	{
 		while (y < HEIGHT)
 		{
-			ft_memmove(data->fractal.points + WIDTH * y - horizontal * (horizontal < 0),
-				data->fractal.points + WIDTH * y + horizontal * (horizontal > 0),
+			ft_memmove(data->fractal.points + WIDTH * y
+				- horizontal * (horizontal < 0),
+				data->fractal.points + WIDTH * y
+				+ horizontal * (horizontal > 0),
 				(WIDTH - abs(horizontal)) * sizeof(t_point));
 			y++;
 		}

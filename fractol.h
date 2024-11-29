@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 09:04:16 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/27 16:28:26 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/11/29 09:25:51 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ typedef struct s_point
 	t_lcomplex	z;
 	int			iteration;
 }	t_point;
-
 
 typedef struct s_fractal
 {
@@ -79,18 +78,23 @@ int		expose_hook(t_data *vars);
 int		mouse_hook(int button, int x, int y, t_data *vars);
 int		loop_hook(t_data *data);
 
-void	get_point(t_lcomplex c, double pow, t_data *data, complex pos);
-void	compute_fractal(t_data *data, int min_x, int max_x);
+void	get_point(t_lcomplex c, double pow, t_data *data, int pos);
+void	update_point(t_data *data, int x, int y);
 void	reset_point(t_data *data, int x, int y);
 void	reset_fractal(t_data *data);
-
-void	zoom(t_data *data, double factor, int mouse_x, int mouse_y);
-void	move(t_data *data, int horizontal, int vertical);
-int		smooth_rgb(double value);
-void	draw_pixels(t_data *data, int min_x, int max_x);
 
 int		init_mlx(t_data *data);
 int		mlx_refresh_image(t_data *data);
 void	mlx_set_pixel(t_data *data, int x, int y, int color);
+
+void	zoom(t_data *data, double factor, int mouse_x, int mouse_y);
+void	move(t_data *data, int horizontal, int vertical);
+
+int		smooth_rgb(double value);
+int		get_color(t_data *data, int x, int y);
+void	draw_pixels(t_data *data, int min_x, int max_x);
+void	render_debugs(t_data *data);
+
+void	update_default(t_data *data);
 
 #endif

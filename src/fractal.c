@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 11:12:34 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/27 16:28:01 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/11/29 09:27:28 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ static t_lcomplex	fast_cpowl(t_lcomplex z, double pow)
 	return (z);
 }
 
-void	get_point(t_lcomplex c, double pow, t_data *data, complex pos)
+void	get_point(t_lcomplex c, double pow, t_data *data, int pos)
 {
 	t_point	*point;
 
-	point = data->fractal.points + (int) (cimag(pos) * WIDTH + creal(pos));
-	if (point->iteration < data->fractal.iteration - 2 && point->iteration >= 10)
+	point = data->fractal.points + pos;
+	if (point->iteration < data->fractal.iteration - 2 && point->iteration >= 5)
 		return ;
 	while (point->iteration < data->fractal.iteration)
 	{
@@ -43,32 +43,22 @@ void	get_point(t_lcomplex c, double pow, t_data *data, complex pos)
 	}
 }
 
-void	compute_fractal(t_data *data, int min_x, int max_x)
+void	update_point(t_data *data, int x, int y)
 {
-	int			x;
-	int			y;
-	t_lcomplex	z;
+	complex	z;
 
-	x = min_x;
-	while (x < max_x)
+	if (data->fractal.type == MANDELBROT)
 	{
-		y = 0;
-		while (y < HEIGHT)
-		{
-			z = (x + data->x) / data->scale + (y + data->y) / data->scale * I;
-			if (data->fractal.type == MANDELBROT)
-				get_point(z, data->fractal.power, data, y * I + x);
-			else if (data->fractal.type == JULIA)
-				get_point(data->fractal.c, 2, data, y * I + x);
-			y++;
-		}
-		x++;
+		z = (x + data->x) / data->scale + (y + data->y) / data->scale * I;
+		get_point(z, data->fractal.power, data, y * WIDTH + x);
 	}
+	else if (data->fractal.type == JULIA)
+		get_point(data->fractal.c, 2, data, y * WIDTH + x);
 }
 
 void	reset_point(t_data *data, int x, int y)
 {
-	t_point *point;
+	t_point	*point;
 
 	point = &data->fractal.points[y * WIDTH + x];
 	point->iteration = 0;

@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 14:15:57 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/27 14:44:16 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/11/29 09:27:40 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	update_default(t_data *data)
 {
 	static int	min_x = 0;
 	int			x;
-	int 		y;
+	int			y;
 
 	x = min_x;
 	while (x < min_x + WIDTH / 10)
@@ -25,6 +25,7 @@ void	update_default(t_data *data)
 		while (y < HEIGHT)
 		{
 			update_point(data, x, y);
+			mlx_set_pixel(data, x, y, get_color(data, x, y));
 			y++;
 		}
 		x++;
