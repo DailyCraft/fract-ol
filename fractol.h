@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 09:04:16 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/29 09:25:51 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:11:24 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,22 @@ typedef struct s_data
 {
 	void		*mlx;
 	void		*window;
+
 	int			debug_enabled;
 	int			color_index;
+
 	long double	scale;
 	double		x;
 	double		y;
 	t_fractal	fractal;
 	t_image		img;
+
+	int			centered_update_x;
+	int			centered_update_y;
+	int			rect_update_min_x;
+	int			rect_update_min_y;
+	int			rect_update_max_x;
+	int			rect_update_max_y;
 }	t_data;
 
 int		key_hook(int key, t_data *vars);
@@ -78,7 +87,7 @@ int		expose_hook(t_data *vars);
 int		mouse_hook(int button, int x, int y, t_data *vars);
 int		loop_hook(t_data *data);
 
-void	get_point(t_lcomplex c, double pow, t_data *data, int pos);
+int		get_point(t_lcomplex c, double pow, t_data *data, int pos);
 void	update_point(t_data *data, int x, int y);
 void	reset_point(t_data *data, int x, int y);
 void	reset_fractal(t_data *data);
@@ -95,6 +104,10 @@ int		get_color(t_data *data, int x, int y);
 void	draw_pixels(t_data *data, int min_x, int max_x);
 void	render_debugs(t_data *data);
 
-void	update_default(t_data *data);
+int		update_default(t_data *data);
+int		update_centered(t_data *data);
+int		update_rect(t_data *data);
+void	set_update_rect_x(t_data *data, int min_x, int max_x);
+void	set_update_rect_y(t_data *data, int min_y, int max_y);
 
 #endif

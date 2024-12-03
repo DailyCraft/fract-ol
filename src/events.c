@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 10:20:26 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/29 09:19:31 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:52:52 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,41 @@ int	key_hook(int key, t_data *data)
 	else if (key == XK_d)
 		data->debug_enabled = !data->debug_enabled;
 	else if (key == XK_c)
+	{
 		data->color_index = (data->color_index + 1) % 2;
+		draw_pixels(data, 0, WIDTH);
+	}
+	else if (key == XK_r)
+	{
+		data->scale = 350;
+		data->x = WIDTH / -2.0;
+		data->y = HEIGHT / -2.0;
+		data->centered_update_x = WIDTH / 2;
+		data->centered_update_y = HEIGHT / 2;
+		reset_fractal(data);
+	}
 	return (0);
 }
 
 int	expose_hook(t_data *data)
 {
-	update_default(data);
+	if (data->centered_update_x != -1)
+	{
+		if (update_centered(data))
+			data->centered_update_x = -1;
+	}
+	/* else if (data->rect_update_max_x != 0)
+	{
+		if (update_rect(data))
+		{
+			data->rect_update_min_x = 0;
+			data->rect_update_min_y = 0;
+			data->rect_update_max_x = 0;
+			data->rect_update_max_y = 0;
+		}
+	} */
+	else
+		update_default(data);
 	mlx_refresh_image(data);
 	if (data->debug_enabled)
 		render_debugs(data);

@@ -6,13 +6,14 @@
 #    By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/22 08:59:59 by dvan-hum          #+#    #+#              #
-#    Updated: 2024/11/29 09:32:49 by dvan-hum         ###   ########.fr        #
+#    Updated: 2024/12/03 10:11:09 by dvan-hum         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fractol
 
-CC = gcc -Wall -Wextra -Werror
+#CC = gcc -Wall -Wextra -Werror -O3
+CC = gcc -Wall -Wextra -Werror -g -fsanitize=address
 
 SRC = events.c fractal.c main.c mlx.c render.c move.c update.c
 OBJ = $(patsubst %.c, obj/%.o, $(SRC))
@@ -20,25 +21,21 @@ INCLUDES = ./
 
 all: $(NAME)
 
-makelibft:
+makelibs:
 	make -C libft
-	cp libft/libft.a ./
-
-makeminilibx:
 	make -C minilibx
-	cp minilibx/libmlx.a ./
 
-$(NAME): makelibft makeminilibx $(OBJ)
-	$(CC) $(OBJ) -I ./libft -L ./libft -lft -I ./minilibx -L ./minilibx -lmlx -lXext -lX11 -lm -o $(NAME)
+$(NAME): makelibs $(OBJ)
+	$(CC) $(OBJ) -L ./libft -L ./minilibx -lft -lmlx -lXext -lX11 -lm -o $(NAME)
 
 obj/%.o: src/%.c | ./obj
-	$(CC) -c $< -o $@ -I $(INCLUDES) -I ./libft -L ./libft -lft -I ./minilibx -L ./minilibx -lmlx
+	$(CC) -c $< -o $@ -I $(INCLUDES) -I ./libft -I ./minilibx
 
 ./obj:
 	mkdir obj
 
 clean:
-	rm -rf ./obj libft.a libmlx.a
+	rm -rf ./obj
 	make -C libft clean
 	make -C minilibx clean
 

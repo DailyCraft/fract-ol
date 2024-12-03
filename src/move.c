@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 09:09:44 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/29 09:28:23 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:14:35 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	zoom(t_data *data, double factor, int mouse_x, int mouse_y)
 		}
 		y++;
 	}
+	data->centered_update_x = mouse_x;
+	data->centered_update_y = (HEIGHT - 1 - mouse_y);
 }
 
 static void	reset_moved(t_data *data, int horizontal, int vertical)
@@ -57,30 +59,46 @@ static void	reset_moved(t_data *data, int horizontal, int vertical)
 	}
 }
 
-void	move(t_data *data, int horizontal, int vertical)
+static void	move_horizontal(t_data *data, int horizontal)
 {
 	int	y;
 
-	data->fractal.iteration = fminl(data->scale / 25, 500);
 	y = 0;
+	while (y < HEIGHT)
+	{
+		ft_memmove(data->fractal.points + WIDTH * y
+			- horizontal * (horizontal < 0),
+			data->fractal.points + WIDTH * y
+			+ horizontal * (horizontal > 0),
+			(WIDTH - abs(horizontal)) * sizeof(t_point));
+		y++;
+	}
+	if (horizontal < 0)
+		set_update_rect_x(data, 0, -horizontal);
+	else
+		set_update_rect_x(data, WIDTH - horizontal, WIDTH);
+	set_update_rect_y(data, 0, HEIGHT);
+}
+
+static void	move_vertical(t_data *data, int vertical)
+{
+	ft_memmove(data->fractal.points - vertical * WIDTH * (vertical < 0),
+		data->fractal.points + vertical * WIDTH * (vertical > 0),
+		WIDTH * (HEIGHT - abs(vertical)) * sizeof(t_point));
+	if (vertical < 0)
+		set_update_rect_y(data, HEIGHT - vertical, HEIGHT);
+	else
+		set_update_rect_y(data, 0, vertical);
+	set_update_rect_x(data, 0, WIDTH);
+}
+
+void	move(t_data *data, int horizontal, int vertical)
+{
+	data->fractal.iteration = fminl(data->scale / 25, 500);
 	if (horizontal != 0)
-	{
-		while (y < HEIGHT)
-		{
-			ft_memmove(data->fractal.points + WIDTH * y
-				- horizontal * (horizontal < 0),
-				data->fractal.points + WIDTH * y
-				+ horizontal * (horizontal > 0),
-				(WIDTH - abs(horizontal)) * sizeof(t_point));
-			y++;
-		}
-	}
+		move_horizontal(data, horizontal);
 	if (vertical != 0)
-	{
-		ft_memmove(data->fractal.points - vertical * WIDTH * (vertical < 0),
-			data->fractal.points + vertical * WIDTH * (vertical > 0),
-			WIDTH * (HEIGHT - abs(vertical)) * sizeof(t_point));
-	}
+		move_vertical(data, vertical);
 	reset_moved(data, horizontal, vertical);
 	draw_pixels(data, 0, WIDTH);
 }

@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 08:59:56 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/11/27 16:15:58 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/11/29 11:31:34 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,12 @@ int	main(int argc, char **argv)
 	data->y = HEIGHT / -2.0;
 	data->debug_enabled = 0;
 	data->color_index = 0;
+	data->centered_update_x = WIDTH / 2;
+	data->centered_update_y = HEIGHT / 2;
+	data->rect_update_min_x = 0;
+	data->rect_update_min_y = 0;
+	data->rect_update_max_x = 0;
+	data->rect_update_max_y = 0;
 	reset_fractal(data);
 	if (init_type(data, argc, argv)
 		&& init_mlx(data))
