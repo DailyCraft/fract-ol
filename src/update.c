@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 14:15:57 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/12/03 10:50:13 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:48:48 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,24 @@ int	update_default(t_data *data)
 	return (0);
 }
 
+static int	update_centered_x(t_data *data, int i, int y)
+{
+	int	x;
+
+	x = ft_max(0, data->centered_update_x - WIDTH / 20.0 * i);
+	while (x < data->centered_update_x + WIDTH / 20.0 * i)
+	{
+		if (x < WIDTH && y < HEIGHT
+			&& (x <= data->centered_update_x - WIDTH / 20.0 * (i - 1)
+				|| x >= data->centered_update_x + WIDTH / 20.0 * (i - 1)
+				|| y <= data->centered_update_y - HEIGHT / 20.0 * (i - 1)
+				|| y >= data->centered_update_y + HEIGHT / 20.0 * (i - 1)))
+			update_point(data, x, y);
+		x++;
+	}
+	return (x);
+}
+
 int	update_centered(t_data *data)
 {
 	static int		i;
@@ -46,17 +64,7 @@ int	update_centered(t_data *data)
 	y = ft_max(0, data->centered_update_y - HEIGHT / 20.0 * i);
 	while (y < data->centered_update_y + HEIGHT / 20.0 * i)
 	{
-		x = ft_max(0, data->centered_update_x - WIDTH / 20.0 * i);
-		while (x < data->centered_update_x + WIDTH / 20.0 * i)
-		{
-			if (x < WIDTH && y < HEIGHT
-				&& (x <= data->centered_update_x - WIDTH / 20.0 * (i - 1)
-					|| x >= data->centered_update_x + WIDTH / 20.0 * (i - 1)
-					|| y <= data->centered_update_y - HEIGHT / 20.0 * (i - 1)
-					|| y >= data->centered_update_y + HEIGHT / 20.0 * (i - 1)))
-				update_point(data, x, y);
-			x++;
-		}
+		x = update_centered_x(data, i, y);
 		y++;
 	}
 	i++;
@@ -101,18 +109,4 @@ int	update_rect(t_data *data)
 		return (1);
 	}
 	return (0);
-}
-
-void	set_update_rect_x(t_data *data, int min_x, int max_x)
-{
-	data->rect_update_min_x = ft_max(data->rect_update_min_x, ft_max(0, min_x));
-	data->rect_update_max_x = ft_min(data->rect_update_max_x,
-			ft_min(WIDTH, max_x));
-}
-
-void	set_update_rect_y(t_data *data, int min_y, int max_y)
-{
-	data->rect_update_min_y = ft_max(data->rect_update_min_y, ft_max(0, min_y));
-	data->rect_update_max_y = ft_min(data->rect_update_max_y,
-			ft_min(HEIGHT, max_y));
 }

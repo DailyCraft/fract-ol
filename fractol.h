@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 09:04:16 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/12/03 10:11:24 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:24:03 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	mlx_set_pixel(t_data *data, int x, int y, int color);
 void	zoom(t_data *data, double factor, int mouse_x, int mouse_y);
 void	move(t_data *data, int horizontal, int vertical);
 
-int		smooth_rgb(double value);
+void	reset_view(t_data *data);
 int		get_color(t_data *data, int x, int y);
 void	draw_pixels(t_data *data, int min_x, int max_x);
 void	render_debugs(t_data *data);
