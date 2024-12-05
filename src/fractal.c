@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 11:12:34 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/12/03 09:52:08 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:50:10 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,14 @@ int	get_point(t_lcomplex c, double pow, t_data *data, int pos)
 		return (0);
 	while (point->iteration < data->fractal.iteration)
 	{
-		point->z = fast_cpowl(point->z, pow) + c;
+		if (data->fractal.is_burning_ship)
+		{
+			point->z = fast_cpowl(
+					fabsl(creall(point->z)) + fabsl(cimagl(point->z)) * I,
+					pow) + c;
+		}
+		else
+			point->z = fast_cpowl(point->z, pow) + c;
 		point->iteration++;
 		if (cabsl(point->z) > 2)
 			return (1);

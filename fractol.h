@@ -6,7 +6,7 @@
 /*   By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 09:04:16 by dvan-hum          #+#    #+#             */
-/*   Updated: 2024/12/04 16:24:03 by dvan-hum         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:48:19 by dvan-hum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@
 # include <mlx.h>
 # include <X11/X.h>
 # include <X11/keysymdef.h>
-//# include <stdio.h>
-//# include <string.h>
 
 typedef long double complex	t_lcomplex;
 
@@ -45,6 +43,7 @@ typedef struct s_point
 typedef struct s_fractal
 {
 	enum e_type	type;
+	int			is_burning_ship;
 	double		power;
 	t_lcomplex	c;
 	t_point		points[WIDTH * HEIGHT];
@@ -98,6 +97,10 @@ void	mlx_set_pixel(t_data *data, int x, int y, int color);
 
 void	zoom(t_data *data, double factor, int mouse_x, int mouse_y);
 void	move(t_data *data, int horizontal, int vertical);
+
+void	print_welcome(char *prog);
+void	print_julia_help(char *prog);
+void	print_burning_ship_help(char *prog);
 
 void	reset_view(t_data *data);
 int		get_color(t_data *data, int x, int y);
