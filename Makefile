@@ -6,14 +6,13 @@
 #    By: dvan-hum <dvan-hum@student.42perpignan.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/22 08:59:59 by dvan-hum          #+#    #+#              #
-#    Updated: 2024/12/05 15:20:22 by dvan-hum         ###   ########.fr        #
+#    Updated: 2024/12/05 18:34:42 by dvan-hum         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fractol
 
 CC = gcc -Wall -Wextra -Werror -O3
-#CC = gcc -Wall -Wextra -Werror -g -fsanitize=address
 
 SRC = events.c fractal.c main.c mlx.c move.c print.c render.c update.c utils.c
 OBJ = $(patsubst %.c, obj/%.o, $(SRC))
